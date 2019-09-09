@@ -29,16 +29,16 @@ class ControllerCommonFooter extends Controller {
 		$result = json_decode($ipwhois, true);
 		
 		// session_start();
-		if ($result['city'] && empty($_SESSION["city"])) {
-			$_SESSION["city"] = $result['city'];
+		if ($result['city'] && empty($this->session->data['city'])) {
+			$this->session->data['city'] = $result['city'];
 		}
 
 		if (isset($this->request->get['city'])) {
-			$_SESSION["city"] = $this->request->get['city'];
+			$this->session->data['city'] = $this->request->get['city'];
 		}
 
-		if ($_SESSION["city"]) {
-			$data['current_city'] = $_SESSION["city"];
+		if ($this->session->data['city']) {
+			$data['current_city'] = $this->session->data['city'];
 		} else {
 			$data['current_city'] = 'Выберите город';
 		}

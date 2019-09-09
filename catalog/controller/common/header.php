@@ -55,35 +55,21 @@ class ControllerCommonHeader extends Controller {
 		}
 
 		// GetIP
-		function GetIP() {
-			if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-				$ip = $_SERVER['HTTP_CLIENT_IP'];
-			} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-				$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-			} else {
-				$ip = $_SERVER['REMOTE_ADDR'];
-			}
-			// $ip = '37.99.48.41';
-			return $ip;
-		}
-
-		$client_ip = GetIP();
+		$client_ip = $this->GetIP();
 		$ipwhois = file_get_contents('http://free.ipwhois.io/json/' . $client_ip . '?lang=ru');
 		$result = json_decode($ipwhois, true);
 
 		session_start();
-		if ($result['city'] && empty($_SESSION["city"])) {
-			$_SESSION["city"] = $result['city'];
-			$GLOBALS["city"] = $result['city'];
+		if ($result['city'] && empty($this->session->data['city'])) {
+			$this->session->data['city'] = $result['city'];
 		}
 
 		if (isset($this->request->get['city'])) {
-			$_SESSION["city"] = $this->request->get['city'];
-			$GLOBALS["city"] = $this->request->get['city'];
+			$this->session->data['city'] = $this->request->get['city'];
 		}
 
-		if ($_SESSION["city"]) {
-			$data['current_city'] = $_SESSION["city"];
+		if ($this->session->data['city']) {
+			$data['current_city'] = $this->session->data['city'];
 		} else {
 			$data['current_city'] = 'Выберите город';
 		}
@@ -126,5 +112,17 @@ class ControllerCommonHeader extends Controller {
 		$data['cart'] = $this->load->controller('common/cart');
 
 		return $this->load->view('common/header', $data);
+	}
+
+	function GetIP() {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+			// $ip = '37.99.48.41';
+		return $ip;
 	}
 }
