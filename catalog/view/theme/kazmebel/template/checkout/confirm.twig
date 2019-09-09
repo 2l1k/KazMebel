@@ -1,0 +1,54 @@
+{% if not redirect %}
+<div class="history-table cart-table order-table">
+	<table>
+		<thead>
+			<tr>
+				<th>{{ column_name }}</th>
+				<th>{{ column_quantity }}</th>
+				<th>{{ column_price }}</th>
+				<th>{{ column_total }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for product in products %}
+			<tr>
+				<td class="history-table__name">
+					<p>{{ product.name }}</p>
+					<p class="cat">{{ product.catname }}</p>
+				</td>
+				<td data-name="Количество:">
+					<span>{{ product.quantity }}</span>
+				</td>
+				<td data-name="Цена:">              
+					<!-- <p class="old-price">220 000 Т</p> -->
+					<p class="price">{{ product.price }}</p>
+				</td>
+				<td data-name="Итого:">   
+					<p class="price">{{ product.total }}</p>
+				</td>
+			</tr>
+			{% endfor %}
+			<tr class="cart-table__sum">
+				<td colspan="2">
+					{{ payment }}                   
+				</td>
+				<td>
+					<p>{{ totals[0].title }}:</p>
+					<p>{{ totals[1].title }}:</p>
+					<p>{{ totals[2].title }}:</p>
+				</td>
+				<td>
+					<p>{{ totals[0].text }}:</p>
+					<p>{{ totals[1].text }}:</p>
+					<p>{{ totals[2].text }}:</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+{% else %} 
+<script type="text/javascript"><!--
+location = '{{ redirect }}';
+//--></script> 
+{% endif %} 

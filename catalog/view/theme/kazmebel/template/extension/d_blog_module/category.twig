@@ -1,0 +1,68 @@
+{{ header }}
+<div class="container">
+    <div class="header__breadcrumbs">
+        <ul class="breadcrumbs">
+            <li class="breadcrumbs__item breadcrumbs__item_home">
+                <a href="/" class="breadcrumbs__link">
+                    <svg width="14" height="14">
+                        <use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#home"></use>
+                    </svg>
+                </a>
+            </li>
+            {% for breadcrumb in breadcrumbs %}
+            {% if breadcrumb.text != '<i class="fa fa-home"></i>' %}
+            <li class="breadcrumbs__item"><a href="{{ breadcrumb.href }}" class="breadcrumbs__link">{{ breadcrumb.text }}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+
+<section class="section catalog-inner lk">
+    <div class="container">
+        <h2 class="section__title">{{heading_title}}</h2>
+
+
+        <div class="bm">
+            {% if categories %}
+            <div class="bm-categories">
+                <div class="h3">{{text_categories}}</div>
+
+                <div class="row auto-clear">
+                    {% for category in categories %}
+                    <div class="col-sm-{{category.col}} col-xs-4">
+                        <a class="item-cateogry" href="{{category.href}}">
+                            {% if setting.category.sub_category_image %}
+                                <div class="image"><img src="{{category.thumb}}" alt="{{category.title}}" title="{{category.title}}" /></div>
+                            {% endif %}
+                            <div class="title">{{category.title}}</div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            {% endif %}
+            
+            {% if posts %}
+                {% include template(layout_template) with posts %}
+            {% endif %}
+
+            {% if not posts and post_display_on_main == false %}
+                <p class="bm-empty">{{text_empty}}</p>
+                <div class="buttons">
+                    <div class="pull-right">
+                            {% include template('partial/button') with {button:{
+                                link:continue, 
+                                style:'primary',
+                                text_button: button_continue
+                        }} %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{{footer}}

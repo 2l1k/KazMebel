@@ -1,0 +1,58 @@
+
+<section class="slider">
+	<div class="slider__links">
+		{% set n = categories|length - 1 %}
+		{% for i in range(0, n) %}
+		{% if ((i % 2) == 0) %}
+		<a href="{{ categories[i].href }}" class="slider__link">
+			{{ categories[i].description }}
+			<span>{{ categories[i].name }}</span>
+		</a>
+		{% endif %}
+		{% endfor %}
+	</div>
+
+	<div class="slider__wrapper">
+		<div class="slider__buttons">
+			<button class="btn slider__btn js-slider-prev">
+				<svg>
+					<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+				</svg>
+			</button>
+			<button class="btn slider__btn js-slider-next">
+				<svg>
+					<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+				</svg>
+			</button>
+		</div>
+		<div class="slider__main slider-main js-slider-main">
+			{% for banner in banners %}
+			<div>
+				<div class="slider-main__item">
+					<img src="{{ banner.image }}" alt="{{ banner.title }}">
+					<div class="slider-main__info">
+						<h2 class="slider-main__title">{{ banner.title }}</h2>
+						<h3 class="slider-main__subtitle">{{ banner.sub }}</h3>
+						{% if banner.link %}
+						<a href="{{ banner.link }}">
+							<button class="btn slider-main__btn">{{ banner.btn }}</button>
+						</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div class="slider__links">
+		{% for i in range(0, n) %}
+		{% if (((i + 1) % 2) == 0) %}
+		<a href="{{ categories[i].href }}" class="slider__link">
+			{{ categories[i].description }}
+			<span>{{ categories[i].name }}</span>
+		</a>
+		{% endif %}
+		{% endfor %}
+	</div>
+</section>

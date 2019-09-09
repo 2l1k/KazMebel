@@ -1,0 +1,28 @@
+<section class="categories">
+	<div class="container">
+		<div class="categories__slider">
+			<div class="slider__buttons">
+				<button class="btn slider__btn js-categories-slider-prev">
+					<svg>
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+					</svg>
+				</button>
+				<button class="btn slider__btn js-categories-slider-next">
+					<svg>
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+					</svg>
+				</button>
+			</div>
+			<div class="js-categories-slider">
+				{% for category in categories %}
+				<div>
+					<a href="{{ category.href }}" class="slider__link">
+						{{ category.description }}
+						<span>{{ category.name }}</span>
+					</a>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>

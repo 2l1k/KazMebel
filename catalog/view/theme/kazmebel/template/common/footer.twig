@@ -1,0 +1,108 @@
+</main>
+
+<footer class="footer">
+	<div class="container footer__container">
+		{% if logo %}
+		<a href="{{ home }}" class="logo">
+			<img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="logo__img" width="216" height="49" />
+		</a>{% else %}
+		<h2><a href="{{ home }}" class="logo">{{ name }}</a></h2>
+		{% endif %}
+
+		<div class="location js-location location_white">
+			<button class="btn location__btn location__btn_black js-location-btn">{{ current_city }}</button>
+			{% if cities %}
+			<ul class="location__list">
+				{% for city in cities %}
+				<li class="location__item">
+					<a href="index.php?city={{ city.name }}" class="location__link">{{ city.name }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+
+		<a href="tel:{{ telephone }}" class="phone">
+			<svg width="17" height="18">
+				<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#phone"></use>
+			</svg>
+			{{ telephone }}
+		</a>
+
+		<div class="social">
+			<span>Мы в социальных сетях</span>
+
+			<a href="" class="social__link">
+				<svg width="24" height="24">
+					<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#social-in"></use>
+				</svg>
+			</a>
+
+			<a href="" class="social__link">
+				<svg width="24" height="24">
+					<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#social-fb"></use>
+				</svg>
+			</a>
+		</div>
+	</div>
+
+	<div class="footer__main">
+		<div class="container">
+			<div class="footer__info">
+				{{config_open}}
+				<br>
+				{{config_comment}}
+			</div>
+			{% if informations %}
+			<ul class="footer__list menu-footer">
+				{% for information in informations %}
+				<li class="menu-footer__item">
+					<a href="{{ information.href }}" class="menu-footer__link">{{ information.title }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="container footer__copy">
+		<p>{{ powered }} {{ year }}</p>
+		<p class="footer__p">
+			<span>Разработка дизайна</span>
+			<a href="http://puzzle.kz/">
+				<img src="catalog/view/theme/kazmebel/img/footer-logo.png" alt="puzzle it" class="footer__logo">
+			</a>
+		</p>
+	</div>
+</footer>
+<script>
+$(document).ready(function(){
+	$(document).click( function(event){
+		if( $(event.target).closest(".location__list").length || $(event.target).closest(".js-location-btn").length ) {
+			return;
+		} else {
+			$(".js-location").removeClass('active');
+		}
+		if( $(event.target).closest(".lang__list").length ||  $(event.target).closest(".js-lang").length ) {
+			return;
+		} else {
+			$(".js-lang").removeClass('active');
+		}
+	});
+	$('.catalog-slider__fav, .sales-slider__fav').on('click',function(e){
+		e.preventDefault();
+		item = $(this).parent().parent();
+		if(item.hasClass('liked')){
+			item.removeClass('liked');
+		} else {
+			item.addClass('liked');
+		}			
+	});
+});
+</script>
+<script src="catalog/view/theme/kazmebel/js/bundle.js"></script>
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+</body></html>

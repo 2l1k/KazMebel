@@ -1,0 +1,13 @@
+{{ header }}
+<div class="container">
+	{{ content_top }}
+	{% if column_left or column_right %}
+	<div class="blocks">
+		{{ column_left }}
+		{{ column_right }}
+	</div>
+	{% endif %}
+</div>
+
+{{ content_bottom }}
+{{ footer }}

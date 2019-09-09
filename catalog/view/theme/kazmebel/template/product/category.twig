@@ -1,0 +1,160 @@
+{{ header }}
+<div class="container">
+	<div class="header__breadcrumbs">
+		<ul class="breadcrumbs">
+			<li class="breadcrumbs__item breadcrumbs__item_home">
+				<a href="/" class="breadcrumbs__link">
+					<svg width="14" height="14">
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#home"></use>
+					</svg>
+				</a>
+			</li>
+			{% for breadcrumb in breadcrumbs %}
+			{% if breadcrumb.text != '<i class="fa fa-home"></i>' %}
+			<li class="breadcrumbs__item"><a href="{{ breadcrumb.href }}" class="breadcrumbs__link">{{ breadcrumb.text }}</a></li>
+			{% endif %}
+			{% endfor %}
+		</ul>
+
+		<div class="filter">
+			<span class="filter__desc">Отсортировать по </span>
+
+			<div class="filter__element js-filter">
+				<button class="btn filter__btn js-filter-btn">
+					{% if manufacturer_info %}
+					{{ manufacturer_info.name }}
+					{% else %}
+					По умолчанию
+					{% endif %}
+				</button>
+				{% if filter %}
+				<ul class="filter__list">
+					<li class="filter__item">
+						<a href="{{ default }}" class="filter__link">По умолчанию</a>
+					</li>
+					{% for item in filter %}
+					<li class="filter__item">
+						<a href="{{ item.href }}" class="filter__link">{{ item.name }}</a>
+					</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			</div>
+			
+
+			<div class="filter__element js-filter">
+				{% for sorts in sorts %}
+				{% if sorts.value == '%s-%s'|format(sort, order) %}
+				<button class="btn filter__btn js-filter-btn">{{ sorts.text }}</button>
+				{% endif %}
+				{% endfor %}
+
+				<ul class="filter__list">
+					{% for sorts in sorts %}
+					{% if sorts.value != '%s-%s'|format(sort, order) %}
+					<li class="filter__item"><a href="{{ sorts.href }}" class="filter__link">{{ sorts.text }}</a></li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<section class="section catalog-inner" id="product-category" >
+	<div class="container">
+		
+		<h2 class="section__title">{{ heading_title }}</h2>
+
+		{{ menu }}
+
+		{{ content_top }}
+
+		{% if products %}
+		<div class="catalog-inner__items product-list"> 
+			{% for product in products %}
+
+			{% if product.special %}
+			<a href="{{ product.href }}" class="sales-slider__item">
+				<img src="{{ product.thumb }}" alt="slider item" class="sales-slider__img">
+				<div class="sales-slider__info">
+					<button class="btn sales-slider__basket" title="{{ button_cart }}" onclick="cart.add('{{ product.product_id }}');">
+						<svg width="24" height="23">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+						</svg>
+					</button>
+					<button class="btn sales-slider__fav" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+						<svg width="24" height="19">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+						</svg>
+					</button>
+
+					<p class="sales-slider__category">{{ product.catname }}</p>
+					<h2 class="sales-slider__title">{{ product.name }}</h2>
+					{% if product.price %}
+					<div class="sales-slider__buy"> 
+						{% if not product.special %}
+						<p class="sales-slider__cost">{{ product.price }}</p>
+						{% else %}
+						<p class="sales-slider__old-cost">{{ product.price }}</p>
+						<p class="sales-slider__cost">{{ product.special }}</p>
+						{% endif %}
+					</div>
+					{% endif %}
+				</div>
+			</a>
+
+			{% else %}
+
+			<a href="{{ product.href }}" class="catalog-slider__item catalog-inner__item">
+				<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="catalog-slider__img">
+				<div class="catalog-slider__info">
+					<button class="btn catalog-slider__fav" type="button" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+						<svg width="24" height="19">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+						</svg>
+					</button>
+
+					<p class="catalog-slider__category">Вывести категорию!</p>
+					<h2 class="catalog-slider__title">{{ product.name }}</h2>
+					<div class="catalog-slider__buy">
+						<button class="btn catalog-slider__basket" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" title="{{ button_cart }}">
+							<svg width="24" height="23">
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+							</svg>
+						</button>
+						<p class="catalog-slider__cost">
+							{% if not product.special %}
+							{{ product.price }}
+							{% else %}
+							{{ product.special }}
+							{% endif %}
+						</p>
+					</div>
+				</div>
+			</a>
+			{% endif %}
+
+			{% endfor %}
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6 text-left">{{ pagination }}</div>
+			<!-- <div class="col-sm-6 text-right">{{ results }}</div> -->
+		</div>
+		{% endif %}
+
+		{% if not categories and not products %}
+		<h3>{{ text_empty }}</h3>
+		<div class="buttons">
+			<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+		</div>
+		{% endif %}
+
+	</div>
+</section>
+
+{{ content_bottom }}
+
+{{ footer }}

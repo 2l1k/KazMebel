@@ -1,0 +1,150 @@
+{{ header }}
+<div class="container">
+	<div class="header__breadcrumbs">
+		<ul class="breadcrumbs">
+			<li class="breadcrumbs__item breadcrumbs__item_home">
+				<a href="/" class="breadcrumbs__link">
+					<svg width="14" height="14">
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#home"></use>
+					</svg>
+				</a>
+			</li>
+			{% for breadcrumb in breadcrumbs %}
+			{% if breadcrumb.text != '<i class="fa fa-home"></i>' %}
+			<li class="breadcrumbs__item"><a href="{{ breadcrumb.href }}" class="breadcrumbs__link">{{ breadcrumb.text }}</a></li>
+			{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+
+
+
+<section class="section catalog-inner lk">
+	<div class="container">
+		<h2 class="section__title">{{heading_title}}</h2>
+		<div class="cart-desc">{{date_published}}</div>
+		<br>
+		<article class="bm">
+			<div class="heading bm-post-info clearfix">
+				{% if (thumb or popup) %}
+				<div class="image">
+					{% if thumb %}
+					<img src="{{thumb}}" title="{{image_title}}" alt="{{image_alt}}" class="img-responsive" style="max-width: 100%" />
+					{% endif %}
+				</div>
+				{% endif %}
+			</div>
+
+			<div class="content bm-post-content">
+				<div id="description" class="description">{{description}}</div>
+				{% if post_videos %}
+				<div class="bm-videos">
+					{% for post_video in post_videos %}
+					<div class="bm-video">
+						<h2>{{post_video.text}}</h2>
+						<div style="text-align: center;">
+							{{post_video.code}}
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+				{% endif %}
+
+				{% if setting.post.tag_display and tags %}
+				<div class="tag">
+					<span class="tag-title">{{text_tags}}</span>
+					{% for tag in tags %}
+					<a href="{{tag.href}}">{{tag.text}}</a>
+					{% endfor %}
+				</div>
+				{% endif %}
+			</div>
+		</article>
+
+		{% if products %}
+		<h2 class="section__title">Товары в проекте</h2>
+		<div class="catalog-inner__items">
+
+			{% for product in products %}
+			
+			{% if product.special %}
+			<a href="{{ product.href }}" class="sales-slider__item">
+				<img src="{{ product.thumb }}" alt="slider item" class="sales-slider__img">
+				<div class="sales-slider__info">
+					<button class="btn sales-slider__basket" title="{{ button_cart }}" onclick="cart.add('{{ product.product_id }}');">
+						<svg width="24" height="23">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+						</svg>
+					</button>
+					<button class="btn sales-slider__fav" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+						<svg width="24" height="19">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+						</svg>
+					</button>
+
+					<p class="sales-slider__category">{{ product.catname }}</p>
+					<h2 class="sales-slider__title">{{ product.name }}</h2>
+					{% if product.price %}
+					<div class="sales-slider__buy"> 
+						{% if not product.special %}
+						<p class="sales-slider__cost">{{ product.price }}</p>
+						{% else %}
+						<p class="sales-slider__old-cost">{{ product.price }}</p>
+						<p class="sales-slider__cost">{{ product.special }}</p>
+						{% endif %}
+					</div>
+					{% endif %}
+				</div>
+			</a>
+
+			{% else %}
+
+			<a href="{{ product.href }}" class="catalog-slider__item catalog-inner__item">
+				<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="catalog-slider__img">
+				<div class="catalog-slider__info">
+					<button class="btn catalog-slider__fav" type="button" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+						<svg width="24" height="19">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+						</svg>
+					</button>
+
+					<p class="catalog-slider__category">Вывести категорию!</p>
+					<h2 class="catalog-slider__title">{{ product.name }}</h2>
+					<div class="catalog-slider__buy">
+						<button class="btn catalog-slider__basket" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" title="{{ button_cart }}">
+							<svg width="24" height="23">
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+							</svg>
+						</button>
+						<p class="catalog-slider__cost">
+							{% if not product.special %}
+							{{ product.price }}
+							{% else %}
+							{{ product.special }}
+							{% endif %}
+						</p>
+					</div>
+				</div>
+			</a>
+			{% endif %}
+
+			{% endfor %}
+		</div>
+		{% endif %}
+
+
+	</div>
+</section>
+<script>
+$(function(){
+	$('.popup').magnificPopup({
+		type:'image',
+		gallery: {
+			enabled:true
+		}
+	});
+})
+</script>
+{% include template('partial/d_layout_close') %}
+{{footer}}

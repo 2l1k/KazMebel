@@ -1,0 +1,9 @@
+{% if categories %}
+<div class="categories-inner">
+	{% for category in categories %}
+	{% if category.description %}
+	<a href="{{ category.href }}" class="categories-inner__link">{{ category.description }}<span>{{ category.name }}</span></a>
+	{% endif %}
+	{% endfor %}
+</div>
+{% endif %} 

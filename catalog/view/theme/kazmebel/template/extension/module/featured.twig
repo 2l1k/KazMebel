@@ -1,0 +1,97 @@
+<section class="section catalog">
+	<div class="container">
+		<h2 class="section__title">{{ name }}</h2>
+
+		<div class="catalog__slider">
+			<div class="slider__buttons">
+				<button class="btn slider__btn js-slider-catalog-prev">
+					<svg>
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+					</svg>
+				</button>
+				<button class="btn slider__btn js-slider-catalog-next">
+					<svg>
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+					</svg>
+				</button>
+			</div>
+
+			<div class="catalog-slider js-slider-catalog">
+				{% for product in products %}
+				{% if product.special %}
+				<div>
+					<a href="{{ product.href }}" class="sales-slider__item">
+						<img src="{{ product.thumb }}" alt="slider item" class="sales-slider__img">
+						<div class="sales-slider__info">
+							<button class="btn sales-slider__basket" title="{{ button_cart }}" onclick="cart.add('{{ product.product_id }}');">
+								<svg width="24" height="23">
+									<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+								</svg>
+							</button>
+							<button class="btn sales-slider__fav" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+								<svg width="24" height="19">
+									<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+								</svg>
+							</button>
+
+							<p class="sales-slider__category">{{ product.catname }}</p>
+							<h2 class="sales-slider__title">{{ product.name }}</h2>
+							{% if product.price %}
+							<div class="sales-slider__buy"> 
+								{% if not product.special %}
+								<p class="sales-slider__cost">{{ product.price }}</p>
+								{% else %}
+								<p class="sales-slider__old-cost">{{ product.price }}</p>
+								<p class="sales-slider__cost">{{ product.special }}</p>
+								{% endif %}
+							</div>
+							{% endif %}
+						</div>
+					</a>
+				</div>
+
+				{% else %}
+
+				<div>
+					<a href="{{ product.href }}" class="catalog-slider__item catalog-inner__item">
+						<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="catalog-slider__img">
+						<div class="catalog-slider__info">
+							<button class="btn catalog-slider__fav" type="button" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+								<svg width="24" height="19">
+									<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+								</svg>
+							</button>
+
+							<p class="catalog-slider__category">Вывести категорию!</p>
+							<h2 class="catalog-slider__title">{{ product.name }}</h2>
+							<div class="catalog-slider__buy">
+								<button class="btn catalog-slider__basket" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" title="{{ button_cart }}">
+									<svg width="24" height="23">
+										<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+									</svg>
+								</button>
+								<p class="catalog-slider__cost">
+									{% if not product.special %}
+									{{ product.price }}
+									{% else %}
+									{{ product.special }}
+									{% endif %}
+								</p>
+							</div>
+						</div>
+					</a>
+				</div>
+				{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="goto-link">
+			<a href="catalog/view/theme/kazmebel/catalog.html">
+				Перейти в каталог
+				<svg width="14" height="11">
+					<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#blocks-arrow"></use>
+				</svg>
+			</a>
+		</div>
+	</div>
+</section>

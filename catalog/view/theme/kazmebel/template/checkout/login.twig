@@ -1,0 +1,24 @@
+<div>
+	<h4>{{ text_new_customer }}</h4>
+	<p>{{ text_register }}</p>
+	<div>{{ text_register_account }}</div>
+	<div class="radio">
+		<label> {% if account == 'register' %}
+			<input type="radio" name="account" value="register" checked="checked" hidden="" />
+			{% else %}
+			<!-- <input type="radio" name="account" value="register" hidden="" /> -->
+			{% endif %}</label>
+	</div>
+	
+	<button type="button" value="{{ button_continue }}" id="button-account" data-loading-text="{{ text_loading }}" class="btn item-inner__buy next-tab">{{ button_continue }}</button>
+</div>
+<div>
+	<h4>{{ text_returning_customer }}</h4>
+	<p>{{ text_i_am_returning_customer }}</p>
+	<form>
+		<input type="text" name="email" value="" placeholder="{{ entry_email }}" id="input-email" class="prof" />
+		<input type="password" name="password" value="" placeholder="{{ entry_password }}" id="input-password" class="pass" />
+		<a href="{{ forgotten }}">{{ text_forgotten }}</a>
+		<button type="button" value="{{ button_login }}" id="button-login" data-loading-text="{{ text_loading }}" class="btn item-inner__buy w270 next-tab">{{ button_login }}</button>
+	</form>
+</div>

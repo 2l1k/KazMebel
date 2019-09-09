@@ -1,0 +1,212 @@
+{{ header }}
+<div class="container">
+	<div class="header__breadcrumbs">
+		<ul class="breadcrumbs">
+			<li class="breadcrumbs__item breadcrumbs__item_home">
+				<a href="/" class="breadcrumbs__link">
+					<svg width="14" height="14">
+						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#home"></use>
+					</svg>
+				</a>
+			</li>
+			{% for breadcrumb in breadcrumbs %}
+			{% if breadcrumb.text != '<i class="fa fa-home"></i>' %}
+			<li class="breadcrumbs__item"><a href="{{ breadcrumb.href }}" class="breadcrumbs__link">{{ breadcrumb.text }}</a></li>
+			{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+
+{% if attention %}
+<div class="container">
+	<div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ attention }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+</div>
+{% endif %}
+{% if success %}
+<div class="container">
+	<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+</div>
+{% endif %}
+{% if error_warning %}
+<div class="container">
+	<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+</div>
+{% endif %}
+
+
+<section class="section catalog-inner lk">
+	<div class="container">
+		<h2 class="section__title">Корзина</h2>
+		{% if products %} 
+		<div class="cart-desc">
+			В вашей корзине {{ products|length }} 
+			{% if products|length == 1 %} 
+			товар
+			{% else %}
+			{% if products|length == 2 or products|length == 3 or products|length == 4 %} 
+			товара
+			{% else %}
+			товаров
+			{% endif %}
+			{% endif %} 
+		</div>
+		{% endif %}
+		<form action="{{ action }}" method="post" enctype="multipart/form-data" class="history-table cart-table">
+			<table>
+				<thead>
+					<tr>
+						<th>{{ column_image }}</th>
+						<th>{{ column_name }}</th>
+						<th>{{ column_quantity }}</th>
+						<th>Дополнительно</th>
+						<th>{{ column_total }}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for product in products %}
+					<tr>
+						<td class="history-table__img">
+							{% if product.thumb %}
+							<a href="{{ product.href }}">
+								<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" />
+							</a> 
+							{% endif %}
+						</td>
+						<td class="history-table__name">
+							<p>{{ product.name }}</p>
+							<p class="cat">{{ product.catname }}</p>
+						</td>
+						<td data-name="Количество:">
+							<svg class="minus1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12px" height="7px">
+								<path fill-rule="evenodd" fill="rgb(27, 27, 27)" d="M0.003,1.430 C0.003,1.076 0.138,0.722 0.411,0.445 C0.977,-0.127 1.918,-0.150 2.513,0.394 L6.010,3.594 L9.483,0.397 C10.076,-0.149 11.017,-0.129 11.584,0.442 C12.152,1.013 12.131,1.918 11.538,2.464 L7.041,6.604 C6.468,7.132 5.565,7.133 4.989,6.607 L0.465,2.468 C0.158,2.186 0.003,1.809 0.003,1.430 Z"></path>
+							</svg>
+							<input type="text" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" size="1" class="counter__count js-counter-val btn" />
+							<svg class="plus1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="13px" height="7px">
+								<path fill-rule="evenodd" fill="rgb(27, 27, 27)" d="M12.997,5.569 C12.997,5.923 12.861,6.278 12.587,6.554 C12.019,7.127 11.074,7.149 10.477,6.605 L6.966,3.405 L3.480,6.602 C2.884,7.148 1.940,7.128 1.370,6.557 C0.800,5.986 0.821,5.081 1.417,4.535 L5.931,0.395 C6.507,-0.133 7.413,-0.134 7.991,0.392 L12.533,4.532 C12.841,4.813 12.997,5.190 12.997,5.569 Z"></path>
+							</svg>
+						</td>
+						<td class="cart-table__like">
+							{% if product.wishlist == true %}
+							<a>
+								<span>В избранном</span>
+								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="19px">
+									<path fill-rule="evenodd"  fill="rgb(27, 27, 27)"
+									d="M23.968,6.802 C23.989,6.599 24.000,6.392 24.000,6.184 C24.000,2.769 21.191,0.000 17.726,0.000 C15.175,0.000 12.980,1.502 11.999,3.657 C11.019,1.502 8.823,0.000 6.273,0.000 C2.808,0.000 -0.000,2.769 -0.000,6.184 C-0.000,6.392 0.010,6.599 0.030,6.802 C0.030,6.802 0.153,12.890 12.076,19.015 L12.076,19.015 C23.998,12.890 23.968,6.802 23.968,6.802 ZM6.451,1.363 C7.021,1.363 7.481,1.816 7.481,2.377 C7.481,2.938 7.021,3.392 6.451,3.392 C5.882,3.392 5.423,2.939 5.423,2.377 C5.423,1.817 5.882,1.363 6.451,1.363 ZM3.233,8.953 C3.137,8.979 3.040,8.992 2.945,8.992 C2.475,8.992 2.043,8.685 1.911,8.218 C1.750,7.650 1.673,7.129 1.654,6.654 C1.557,4.154 3.121,2.924 3.198,2.863 C3.668,2.506 4.343,2.590 4.704,3.052 C5.066,3.509 4.984,4.164 4.530,4.525 C4.474,4.571 3.796,5.171 3.801,6.456 C3.803,6.803 3.853,7.199 3.979,7.649 C4.139,8.213 3.804,8.796 3.233,8.953 Z"/>
+								</svg>
+							</a>
+							{% else %}
+							<button type="button" class="btn item-inner__btn wishlist" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+								<a>
+									<span>Добавить в избранное</span>
+									<span class="orange">
+										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="19px">
+											<path fill-rule="evenodd" fill="rgb(255, 255, 255)" d="M23.968,6.802 C23.989,6.599 24.000,6.392 24.000,6.184 C24.000,2.769 21.191,-0.000 17.726,-0.000 C15.175,-0.000 12.980,1.502 11.999,3.657 C11.019,1.502 8.823,-0.000 6.273,-0.000 C2.808,-0.000 -0.000,2.769 -0.000,6.184 C-0.000,6.392 0.010,6.599 0.030,6.802 C0.030,6.802 0.153,12.890 12.076,19.015 L12.076,19.015 C23.998,12.890 23.968,6.802 23.968,6.802 ZM6.451,1.362 C7.021,1.362 7.481,1.817 7.481,2.377 C7.481,2.938 7.021,3.391 6.451,3.391 C5.882,3.391 5.423,2.938 5.423,2.377 C5.423,1.817 5.882,1.362 6.451,1.362 ZM3.234,8.953 C3.137,8.979 3.040,8.992 2.945,8.992 C2.475,8.992 2.043,8.685 1.911,8.217 C1.750,7.650 1.673,7.128 1.654,6.654 C1.558,4.153 3.121,2.924 3.198,2.863 C3.668,2.505 4.343,2.590 4.704,3.052 C5.066,3.509 4.984,4.164 4.530,4.525 C4.474,4.571 3.796,5.171 3.801,6.456 C3.803,6.802 3.853,7.198 3.979,7.649 C4.139,8.213 3.804,8.796 3.234,8.953 Z"></path>
+										</svg>
+									</span>
+								</a>
+							</button>
+							{% endif %}
+						</td>
+						<td data-name="Цена:">							
+							<!-- <p class="old-price">220 000 Т</p> -->
+							<p class="price">{{ product.total }}</p>
+						</td>
+						<td>
+							<button type="button" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger" onclick="cart.remove('{{ product.cart_id }}');">
+								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="18px">
+									<path fill-rule="evenodd"  fill="rgb(232, 80, 34)"
+									d="M14.687,1.830 L10.299,1.830 C10.264,1.449 10.144,0.806 9.732,0.393 C9.472,0.132 9.141,-0.000 8.750,-0.000 L5.625,-0.000 C5.234,-0.000 4.903,0.132 4.642,0.393 C4.231,0.806 4.110,1.449 4.076,1.830 L0.312,1.830 C0.140,1.830 -0.000,1.967 -0.000,2.136 C-0.000,2.304 0.140,2.441 0.312,2.441 L0.950,2.441 L1.549,16.481 C1.560,17.006 1.895,18.000 3.082,18.000 L11.917,18.000 C13.105,18.000 13.440,17.006 13.451,16.487 L14.050,2.441 L14.687,2.441 C14.860,2.441 15.000,2.304 15.000,2.136 C15.000,1.967 14.860,1.830 14.687,1.830 ZM4.687,15.254 C4.687,15.423 4.547,15.559 4.375,15.559 C4.202,15.559 4.062,15.423 4.062,15.254 L4.062,5.186 C4.062,5.018 4.202,4.881 4.375,4.881 C4.547,4.881 4.687,5.018 4.687,5.186 L4.687,15.254 ZM7.812,15.254 C7.812,15.423 7.672,15.559 7.500,15.559 C7.327,15.559 7.187,15.423 7.187,15.254 L7.187,5.186 C7.187,5.018 7.327,4.881 7.500,4.881 C7.672,4.881 7.812,5.018 7.812,5.186 L7.812,15.254 ZM10.937,15.254 C10.937,15.423 10.797,15.559 10.625,15.559 C10.452,15.559 10.312,15.423 10.312,15.254 L10.312,5.186 C10.312,5.018 10.452,4.881 10.625,4.881 C10.797,4.881 10.937,5.018 10.937,5.186 L10.937,15.254 ZM5.091,0.818 C5.231,0.678 5.406,0.610 5.625,0.610 L8.750,0.610 C8.969,0.610 9.143,0.678 9.283,0.818 C9.535,1.069 9.636,1.511 9.671,1.830 L4.704,1.830 C4.739,1.511 4.840,1.069 5.091,0.818 Z"/>
+								</svg>
+							</button>
+						</td>
+					</tr>
+					{% endfor %}
+
+					<tr class="cart-table__sum">
+						<td colspan="4">
+							<div>
+								<form>
+									<input type="text" placeholder="Номер клубной карты">
+									<button class="btn item-inner__buy">Получить скидку</button>
+								</form>
+								<p>{{ totals[1].title }}:</p>
+							</div>
+						</td>
+						<td data-name="Итого: ">
+							{{ totals[1].text }}
+						</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="cart-buttons">
+				<input type="submit" class="hidden" hidden>
+				<a href="{{ continue }}" ><button type="button" class="btn item-inner__buy bordered">{{ button_shopping }}</button></a>
+				<a href="{{ checkout }}"><button type="button" class="btn item-inner__buy">{{ button_checkout }}</button></a>
+			</div>
+		</form>
+	</div>
+</section>
+
+{{ content_bottom }}
+
+<script>
+$(function(){
+	$(".wishlist").click(function() {
+		html  = '<a><span>В избранном</span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="19px"><path fill-rule="evenodd"  fill="rgb(27, 27, 27)" d="M23.968,6.802 C23.989,6.599 24.000,6.392 24.000,6.184 C24.000,2.769 21.191,0.000 17.726,0.000 C15.175,0.000 12.980,1.502 11.999,3.657 C11.019,1.502 8.823,0.000 6.273,0.000 C2.808,0.000 -0.000,2.769 -0.000,6.184 C-0.000,6.392 0.010,6.599 0.030,6.802 C0.030,6.802 0.153,12.890 12.076,19.015 L12.076,19.015 C23.998,12.890 23.968,6.802 23.968,6.802 ZM6.451,1.363 C7.021,1.363 7.481,1.816 7.481,2.377 C7.481,2.938 7.021,3.392 6.451,3.392 C5.882,3.392 5.423,2.939 5.423,2.377 C5.423,1.817 5.882,1.363 6.451,1.363 ZM3.233,8.953 C3.137,8.979 3.040,8.992 2.945,8.992 C2.475,8.992 2.043,8.685 1.911,8.218 C1.750,7.650 1.673,7.129 1.654,6.654 C1.557,4.154 3.121,2.924 3.198,2.863 C3.668,2.506 4.343,2.590 4.704,3.052 C5.066,3.509 4.984,4.164 4.530,4.525 C4.474,4.571 3.796,5.171 3.801,6.456 C3.803,6.803 3.853,7.199 3.979,7.649 C4.139,8.213 3.804,8.796 3.233,8.953 Z"/></svg></a>';
+		$(this).html(html);
+	});
+});
+
+
+
+
+$(document).ready(function(){
+	$(document).click( function(event){
+		if( $(event.target).closest(".location__list").length || $(event.target).closest(".js-location-btn").length ) {
+			return;
+		} else {
+			$(".js-location").removeClass('active');
+		}
+		if( $(event.target).closest(".lang__list").length ||  $(event.target).closest(".js-lang").length ) {
+			return;
+		} else {
+			$(".js-lang").removeClass('active');
+		}
+	});
+	$('.catalog-slider__fav').on('click',function(){
+		item = $(this).parent().parent();
+		if(item.hasClass('liked')){
+			item.removeClass('liked');
+		} else {
+			item.addClass('liked');
+		}			
+	});
+	$('.plus1').on('click',function(){			
+		val = $(this).parent().find('input');
+		count = val[0].value;
+		count++;
+		val[0].value = count;
+		$('.hidden').trigger('click');
+	});
+	$('.minus1').on('click',function(){			
+		val = $(this).parent().find('input');
+		count = val[0].value;
+		if(count>1){
+			count--;
+		}
+		val[0].value = count;
+		$('.hidden').trigger('click');
+	});
+});
+</script>
+{{ footer }} 
