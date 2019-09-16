@@ -23,41 +23,102 @@
 <section class="section catalog-inner lk">
 	<div class="container">
 		<h2 class="section__title">{{heading_title}}</h2>
-		<div class="cart-desc">{{date_published}}</div>
-		<br>
-		<article class="bm">
-			<div class="heading bm-post-info clearfix">
+		<article class="news-desc-section">
+			<div class="top-news">
 				{% if (thumb or popup) %}
-				<div class="image">
+				<div class="top-news-img">
 					{% if thumb %}
 					<img src="{{thumb}}" title="{{image_title}}" alt="{{image_alt}}" class="img-responsive" style="max-width: 100%" />
 					{% endif %}
 				</div>
 				{% endif %}
-			</div>
 
-			<div class="content bm-post-content">
-				<div id="description" class="description">{{description}}</div>
-				{% if post_videos %}
-				<div class="bm-videos">
-					{% for post_video in post_videos %}
-					<div class="bm-video">
-						<h2>{{post_video.text}}</h2>
-						<div style="text-align: center;">
-							{{post_video.code}}
-						</div>
+				<div class="top-news-text">
+					<i class="item-carte-date">{{date_published}}</i>
+					<p class="item-carte-title">{{heading_title}}</p>
+					<p class="item-carte-text">{{author_description}}</p>
+
+					<div class="item-carte-toggles">
+						{% if prev_post %}
+						<a href="{{ prev_post.href }}" data-toggle="tooltip" title="{{ prev_post.text }}">
+							<div class="toggles">
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11">
+									<defs>
+										<style>.cls-1 {fill-rule: evenodd;}</style>
+									</defs>
+									<path id="Shape_1_копия_2" data-name="Shape 1 копия 2" class="cls-1" d="M916.223,515.014l5.057,4.775a0.8,0.8,0,0,0,1.083,0l0.459-.434a0.7,0.7,0,0,0,.224-0.511,0.713,0.713,0,0,0-.224-0.518l-2.949-2.792h9.371a0.728,0.728,0,0,0,.756-0.711v-0.614a0.753,0.753,0,0,0-.756-0.742h-9.4l2.983-2.808a0.688,0.688,0,0,0,0-1.016l-0.459-.432a0.8,0.8,0,0,0-1.084,0l-5.056,4.775A0.7,0.7,0,0,0,916.223,515.014Z" transform="translate(-916 -509)"></path>
+								</svg>
+
+								<i class="left-news">{{ text_prev }}</i>
+							</div>
+						</a>
+						{% endif %}
+
+						{% if next_post %}
+						<a href="{{ next_post.href }}" data-toggle="tooltip" title="{{ next_post.text }}">
+							<div class="toggles">
+								<i class="right-news">{{ text_next }}</i>
+
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11">
+									<defs>
+										<style>.cls-1 {fill-rule: evenodd;}</style>
+									</defs>
+									<path id="Shape_1_копия" data-name="Shape 1 копия" class="cls-1" d="M1251.78,513.986l-5.06-4.775a0.782,0.782,0,0,0-.54-0.211,0.765,0.765,0,0,0-.54.211l-0.46.434a0.682,0.682,0,0,0-.23.511,0.7,0.7,0,0,0,.23.518l2.95,2.792h-9.37a0.726,0.726,0,0,0-.76.711v0.613a0.752,0.752,0,0,0,.76.743h9.4l-2.98,2.808a0.676,0.676,0,0,0,0,1.016l0.46,0.432a0.765,0.765,0,0,0,.54.211,0.779,0.779,0,0,0,.54-0.212l5.06-4.775A0.709,0.709,0,0,0,1251.78,513.986Z" transform="translate(-1238 -509)"></path>
+								</svg>
+							</div>
+						</a>
+						{% endif %}
 					</div>
-					{% endfor %}
+
 				</div>
+			</div>
+			
+			<div class="bottom-news">
+				{% if post_videos %}
+				{% set class = "bottom-news-text" %}
 				{% endif %}
 
-				{% if setting.post.tag_display and tags %}
-				<div class="tag">
-					<span class="tag-title">{{text_tags}}</span>
-					{% for tag in tags %}
-					<a href="{{tag.href}}">{{tag.text}}</a>
-					{% endfor %}
+				<div class="{{ class }}">
+					{{description}}
 				</div>
+
+				<div class="bottom-news-imgs">
+					{% if post_videos %}
+					{% for post_video in post_videos %}
+					<img src="{{post_video.image}}" alt="{{post_video.text}}" class="">
+					{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+			<div class="item-carte-toggles-bottom">
+				{% if prev_post %}
+				<a href="{{ prev_post.href }}" data-toggle="tooltip" title="{{ prev_post.text }}">
+					<div class="toggles">
+						<svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11">
+							<defs>
+								<style>.cls-1 {fill-rule: evenodd;}</style>
+							</defs>
+							<path id="Shape_1_копия_2" data-name="Shape 1 копия 2" class="cls-1" d="M916.223,515.014l5.057,4.775a0.8,0.8,0,0,0,1.083,0l0.459-.434a0.7,0.7,0,0,0,.224-0.511,0.713,0.713,0,0,0-.224-0.518l-2.949-2.792h9.371a0.728,0.728,0,0,0,.756-0.711v-0.614a0.753,0.753,0,0,0-.756-0.742h-9.4l2.983-2.808a0.688,0.688,0,0,0,0-1.016l-0.459-.432a0.8,0.8,0,0,0-1.084,0l-5.056,4.775A0.7,0.7,0,0,0,916.223,515.014Z" transform="translate(-916 -509)"></path>
+						</svg>
+
+						<i class="left-news">{{ text_prev }}</i>
+					</div>
+				</a>
+				{% endif %}
+
+				{% if next_post %}
+				<a href="{{ next_post.href }}" data-toggle="tooltip" title="{{ next_post.text }}">
+					<div class="toggles">
+						<i class="right-news">{{ text_next }}</i>
+
+						<svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11">
+							<defs>
+								<style>.cls-1 {fill-rule: evenodd;}</style>
+							</defs>
+							<path id="Shape_1_копия" data-name="Shape 1 копия" class="cls-1" d="M1251.78,513.986l-5.06-4.775a0.782,0.782,0,0,0-.54-0.211,0.765,0.765,0,0,0-.54.211l-0.46.434a0.682,0.682,0,0,0-.23.511,0.7,0.7,0,0,0,.23.518l2.95,2.792h-9.37a0.726,0.726,0,0,0-.76.711v0.613a0.752,0.752,0,0,0,.76.743h9.4l-2.98,2.808a0.676,0.676,0,0,0,0,1.016l0.46,0.432a0.765,0.765,0,0,0,.54.211,0.779,0.779,0,0,0,.54-0.212l5.06-4.775A0.709,0.709,0,0,0,1251.78,513.986Z" transform="translate(-1238 -509)"></path>
+						</svg>
+					</div>
+				</a>
 				{% endif %}
 			</div>
 		</article>
@@ -67,7 +128,7 @@
 		<div class="catalog-inner__items">
 
 			{% for product in products %}
-			
+
 			{% if product.special %}
 			<a href="{{ product.href }}" class="sales-slider__item">
 				<img src="{{ product.thumb }}" alt="slider item" class="sales-slider__img">

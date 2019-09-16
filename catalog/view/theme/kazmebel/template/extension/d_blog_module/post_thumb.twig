@@ -1,32 +1,5 @@
-<article class="post-layout post-grid">
-    <div class="post-thumb">
-        <div class="image">
-            <a href="{{post.href}}">
-                {% if access_limit %}
-                <div style="position: absolute; width:100%; height:100%; background-image: url(http://ocinstallerlocal/302/d_blog_module/image/catalog/d_blog_module/lock.svg);  background-color: rgb(0, 0, 0, 0.45); background-repeat: no-repeat; background-position: center;"></div>
-                {% endif %}
-                <img src="{{post.thumb}}" alt="{{post.image_alt}}" title="{{post.image_title}}" class="img-responsive"/>
-            </a>
-        </div>
-        
-        <div class="post-thumb-content">
-            <div class="post-thumb-heading">            
-            <!-- {% if setting.post_thumb.category_label_display %}
-                <ul class="category list-unstyled">
-                    {% for category in post.categories %}
-                    <li><a class="{{setting.post_thumb.category_label}}" href="{{category.href}}">{{category.title}}</a></li>
-                    {% endfor %}
-                </ul>
-                {% endif %} -->
-                <h3 class="title"><a href="{{post.href}}">{{post.title}}</a></h3>
-                <span class="title-divider"></span>
-            </div>
-            <div class="post-thumb-heading"> 
-                {% if setting.post_thumb.description_display %}
-                <div class="short-description">{{post.short_description}}</div>
-                {% endif %}
-            </div>
-        </div>
-
-    </div>
-</article>
+<a class="news-elem" href="{{post.href}}">
+    <img src="{{post.thumb}}" alt="{{post.image_alt}}" title="{{post.image_title}}" />
+    <i class="news-date">{{post.date_published}}</i>
+    <p class="news-title">{{post.title}}</p>
+</a>

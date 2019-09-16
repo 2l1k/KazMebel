@@ -235,28 +235,38 @@
 				<div class="textures__main">
 					<div class="textures__info">
 						<figure class="textures__item">
-							<img src="{{ options[0].product_option_value[0].image }}" alt="berta" class="textures__img">
+							<img id="texture-img" src="{{ options[0].product_option_value[0].image }}" alt="berta" class="textures__img">
 							<figcaption class="textures__title">
-								<p>{{ options[0].name }}</p>
-								<p>{{ options[0].product_option_value[0].name }}</p>
+								<p id="type-color">{{ options[0].name }}</p>
+								<p id="name-color">{{ options[0].product_option_value[0].name }}</p>
 							</figcaption>
 						</figure>
 
-						<div class="textures__desc">
+						<div id="desc-texture" class="textures__desc active-desc">
 							{{ options[0].product_option_value[0].content }}
 						</div>
+
+						{% for keys, option in options %}
+						{% for key, option_value in option.product_option_value %}
+						<div class="textures__desc desc-texture{{ option_value.product_option_value_id }}">
+							{{ option_value.content }}
+						</div>
+						{% endfor %}
+						{% endfor %}
 					</div>
 
 					<div class="textures__materials materials">
-						{% for option in options %}
+						{% for keys, option in options %}
 						{% if option.type == 'checkbox' %}
 						<div class="materials__block">
 							<h3 class="materials__title">{{ option.name }}</h3>
 
 							<div class="materials__items">
-								{% for option_value in option.product_option_value %}
-								<label class="materials__item materials-item">
-									<input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" hidden />
+								{% for key, option_value in option.product_option_value %}
+								{% set active = '' %}
+								{% if keys == 0 and key == 0 %}{% set active = 'active' %}{% endif %}
+								<label id="texture{{ option_value.product_option_value_id }}" class="materials__item materials-item {{ active }}">
+									<input type="checkbox" name="option[{{ option.product_option_id }}][{{ option_value.product_option_value_id }}]" value="{{ option_value.product_option_value_id }}" hidden />
 									{% if option_value.image %}
 									<img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" /> 
 									{% endif %}
@@ -266,271 +276,266 @@
 									{% endif %}
 								</label>
 								{% endfor %}
-								
-							<!-- <figure class="materials__item materials-item">
-								<img src="catalog/view/theme/kazmebel/img/texture.jpg" alt="texture">
-								<figcaption class="materials-item__title">AI8-зеленый</figcaption>
-							</figure> -->
+							</div>
 						</div>
+						{% endif %}
+						{% endfor %}
 					</div>
-					{% endif %}
-					{% endfor %}
 				</div>
 			</div>
+		</section>
+		{% endif %}
+
+		{% if mpn or isbn %}
+		<div class="container warranty" id="warranty">
+			<span>{{ mpn }} <span class="warranty__orange">{{ isbn }}</span></span>
 		</div>
-	</section>
-	{% endif %}
+		{% endif %}
 
-	{% if mpn or isbn %}
-	<div class="container warranty" id="warranty">
-		<span>{{ mpn }} <span class="warranty__orange">{{ isbn }}</span></span>
-	</div>
-	{% endif %}
+		{% if downloads %}
+		<section class="section download" id="download">
+			<div class="container">
+				<h2 class="section__title">Скачать</h2>
 
-	{% if downloads %}
-	<section class="section download" id="download">
-		<div class="container">
-			<h2 class="section__title">Скачать</h2>
+				<div class="download__items">
+					{% for download in downloads %}
+					<div class="download__item download-item">
+						<label class="checkbox download-item__checkbox">
+							<input type="checkbox" name="nameCheckbox" value="{{ download.href }}" class="sr-only checkbox__input checkbox" />
+							<span class="checkbox__item"></span>
+						</label>
+						<span class="download-item__title">{{ download.name }}</span>
+						<a href="{{ download.href }}" class="download-item__link" title="{{ download.name }} ({{ download.size }})" download>
+							<svg width="24" height="24">
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#download"></use>
+							</svg>
+						</a>
+					</div>
+					{% endfor %}
+				</div>
 
-			<div class="download__items">
+				<div class="download__btns">
+					<button class="btn download__btn" onclick="downloadSelect()">Скачать все выбранные</button>
+					<button class="btn download__btn" onclick="downloadAll()">Скачать все</button>
+				</div>
+
+				<script>
+				function downloadSelect() {
+					var selectedCheckBoxes = document.querySelectorAll('input.checkbox:checked');
+					var urls = Array.from(selectedCheckBoxes).map(cb => cb.value);
+					var link = document.createElement('a');
+
+					link.setAttribute('download', null);
+					link.style.display = 'none';
+
+					document.body.appendChild(link);
+					if (urls.length > 0) {
+						for (var i = 0; i < urls.length; i++) {
+							link.setAttribute('href', urls[i].replace(new RegExp("&amp;",'g'),"&"));
+							link.click();
+						}
+					}
+					document.body.removeChild(link);
+				}
+
+				var links = [
 				{% for download in downloads %}
-				<div class="download__item download-item">
-					<label class="checkbox download-item__checkbox">
-						<input type="checkbox" name="nameCheckbox" value="{{ download.href }}" class="sr-only checkbox__input checkbox" />
-						<span class="checkbox__item"></span>
-					</label>
-					<span class="download-item__title">{{ download.name }}</span>
-					<a href="{{ download.href }}" class="download-item__link" title="{{ download.name }} ({{ download.size }})" download>
-						<svg width="24" height="24">
-							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#download"></use>
-						</svg>
-					</a>
-				</div>
+				'{{ download.href }}',
 				{% endfor %}
-			</div>
+				];
+				function downloadAll() {
+					var link = document.createElement('a');
 
-			<div class="download__btns">
-				<button class="btn download__btn" onclick="downloadSelect()">Скачать все выбранные</button>
-				<button class="btn download__btn" onclick="downloadAll()">Скачать все</button>
-			</div>
-			
-			<script>
-			function downloadSelect() {
-				var selectedCheckBoxes = document.querySelectorAll('input.checkbox:checked');
-				var urls = Array.from(selectedCheckBoxes).map(cb => cb.value);
-				var link = document.createElement('a');
+					link.setAttribute('download', null);
+					link.style.display = 'none';
 
-				link.setAttribute('download', null);
-				link.style.display = 'none';
-
-				document.body.appendChild(link);
-				if (urls.length > 0) {
-					for (var i = 0; i < urls.length; i++) {
-						link.setAttribute('href', urls[i].replace(new RegExp("&amp;",'g'),"&"));
-						link.click();
-					}
-				}
-				document.body.removeChild(link);
-			}
-
-			var links = [
-			{% for download in downloads %}
-			'{{ download.href }}',
-			{% endfor %}
-			];
-			function downloadAll() {
-				var link = document.createElement('a');
-
-				link.setAttribute('download', null);
-				link.style.display = 'none';
-
-				document.body.appendChild(link);
-				if (links.length > 0) {
-					for (var i = 0; i < links.length; i++) {
-						link.setAttribute('href', links[i].replace(new RegExp("&amp;",'g'),"&"));
-						link.click();
-					}
-				}
-
-				document.body.removeChild(link);
-			}
-			</script>
-		</div>
-	</section>
-	{% endif %}
-
-	{% if projects %}
-	<section class="section projects">
-		<div class="container">
-			<h2 class="section__title">Проекты с товаром</h2>
-
-			<div class="projects__slider">
-				<div class="slider__buttons">
-					<button class="btn slider__btn js-projects-slider-prev">
-						<svg>
-							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
-						</svg>
-					</button>
-					<button class="btn slider__btn js-projects-slider-next">
-						<svg>
-							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
-						</svg>
-					</button>
-				</div>
-
-				<div class="js-projects-slider">
-					{% for project in projects %}
-					<div>
-						<a href="{{ project.href }}" class="blocks__item projects__item">
-							<img src="{{ project.thumb }}" alt="Название компании" class="blocks__img">
-							<div class="blocks__info">
-								<h3 class="blocks__title">
-									{{ project.title }}
-								</h3>
-
-								<span class="blocks__watch">
-									Смотреть 
-									<svg>
-										<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#blocks-arrow"></use>
-									</svg>
-								</span>
-							</div>
-						</a>
-					</div>
-					{% endfor %}
-					
-				</div>
-			</div>
-		</div>
-	</section>
-	{% endif %}
-
-	{% if products %}
-	<section class="section catalog catalog_item-inner">
-		<div class="container">
-			<h2 class="section__title">{{ text_related }} - Похожие товары</h2>
-			<div class="catalog__slider">
-				<div class="slider__buttons">
-					<button class="btn slider__btn js-slider-catalog-prev">
-						<svg>
-							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
-						</svg>
-					</button>
-					<button class="btn slider__btn js-slider-catalog-next">
-						<svg>
-							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
-						</svg>
-					</button>
-				</div>
-				<div class="catalog-slider js-slider-catalog">
-					{% for product in products %}
-					<div>
-						<a href="{{ product.href }}" class="catalog-slider__item">
-							<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="catalog-slider__img">
-							<div class="catalog-slider__info">
-								<button class="btn catalog-slider__fav" type="button" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
-									<svg width="24" height="19">
-										<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
-									</svg>
-								</button>
-
-								<p class="catalog-slider__category">{{ product.catname }}</p>
-								<h2 class="catalog-slider__title">{{ product.name }}</h2>
-								<div class="catalog-slider__buy">
-									<button class="btn catalog-slider__basket" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" title="{{ button_cart }}">
-										<svg width="24" height="23">
-											<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
-										</svg>
-									</button>
-									{% if product.price %}
-									<p class="catalog-slider__cost">
-										{% if not product.special %}
-										{{ product.price }}
-										{% else %} 
-										{{ product.special }}
-										{% endif %}
-									</p>
-									{% endif %}
-								</div>
-							</div>
-						</a>
-					</div>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="goto-link">
-				<a href="catalog/view/theme/kazmebel/catalog.html">
-					Перейти в каталог
-					<svg width="14" height="11">
-						<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#blocks-arrow"></use>
-					</svg>
-				</a>
-			</div>
-		</div>
-	</section>
-	{% endif %}
-
-
-
-
-
-
-
-	
-	{{ footer }} 
-	<script type="text/javascript"><!--
-	$('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
-		$.ajax({
-			url: 'index.php?route=product/product/getRecurringDescription',
-			type: 'post',
-			data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
-			dataType: 'json',
-			beforeSend: function() {
-				$('#recurring-description').html('');
-			},
-			success: function(json) {
-				$('.alert-dismissible, .text-danger').remove();
-
-				if (json['success']) {
-					$('#recurring-description').html(json['success']);
-				}
-			}
-		});
-	});
-	//--></script> 
-	<script type="text/javascript"><!--
-	$('#button-cart').on('click', function() {
-		$.ajax({
-			url: 'index.php?route=checkout/cart/add',
-			type: 'post',
-			data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
-			dataType: 'json',
-			beforeSend: function() {
-				$('#button-cart').button('loading');
-			},
-			complete: function() {
-				$('#button-cart').button('reset');
-			},
-			success: function(json) {
-				$('.alert-dismissible, .text-danger').remove();
-				$('.form-group').removeClass('has-error');
-
-				if (json['error']) {
-					if (json['error']['option']) {
-						for (i in json['error']['option']) {
-							var element = $('#input-option' + i.replace('_', '-'));
-
-							if (element.parent().hasClass('input-group')) {
-								element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
-							} else {
-								element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
-							}
+					document.body.appendChild(link);
+					if (links.length > 0) {
+						for (var i = 0; i < links.length; i++) {
+							link.setAttribute('href', links[i].replace(new RegExp("&amp;",'g'),"&"));
+							link.click();
 						}
 					}
 
-					if (json['error']['recurring']) {
-						$('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+					document.body.removeChild(link);
+				}
+				</script>
+			</div>
+		</section>
+		{% endif %}
+
+		{% if projects %}
+		<section class="section projects">
+			<div class="container">
+				<h2 class="section__title">Проекты с товаром</h2>
+
+				<div class="projects__slider">
+					<div class="slider__buttons">
+						<button class="btn slider__btn js-projects-slider-prev">
+							<svg>
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+							</svg>
+						</button>
+						<button class="btn slider__btn js-projects-slider-next">
+							<svg>
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+							</svg>
+						</button>
+					</div>
+
+					<div class="js-projects-slider">
+						{% for project in projects %}
+						<div>
+							<a href="{{ project.href }}" class="blocks__item projects__item">
+								<img src="{{ project.thumb }}" alt="Название компании" class="blocks__img">
+								<div class="blocks__info">
+									<h3 class="blocks__title">
+										{{ project.title }}
+									</h3>
+
+									<span class="blocks__watch">
+										Смотреть 
+										<svg>
+											<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#blocks-arrow"></use>
+										</svg>
+									</span>
+								</div>
+							</a>
+						</div>
+						{% endfor %}
+
+					</div>
+				</div>
+			</div>
+		</section>
+		{% endif %}
+
+		{% if products %}
+		<section class="section catalog catalog_item-inner">
+			<div class="container">
+				<h2 class="section__title">{{ text_related }} - Похожие товары</h2>
+				<div class="catalog__slider">
+					<div class="slider__buttons">
+						<button class="btn slider__btn js-slider-catalog-prev">
+							<svg>
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+							</svg>
+						</button>
+						<button class="btn slider__btn js-slider-catalog-next">
+							<svg>
+								<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#arrow-left"></use>
+							</svg>
+						</button>
+					</div>
+					<div class="catalog-slider js-slider-catalog">
+						{% for product in products %}
+						<div>
+							<a href="{{ product.href }}" class="catalog-slider__item">
+								<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="catalog-slider__img">
+								<div class="catalog-slider__info">
+									<button class="btn catalog-slider__fav" type="button" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+										<svg width="24" height="19">
+											<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#like"></use>
+										</svg>
+									</button>
+
+									<p class="catalog-slider__category">{{ product.catname }}</p>
+									<h2 class="catalog-slider__title">{{ product.name }}</h2>
+									<div class="catalog-slider__buy">
+										<button class="btn catalog-slider__basket" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" title="{{ button_cart }}">
+											<svg width="24" height="23">
+												<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#basket"></use>
+											</svg>
+										</button>
+										{% if product.price %}
+										<p class="catalog-slider__cost">
+											{% if not product.special %}
+											{{ product.price }}
+											{% else %} 
+											{{ product.special }}
+											{% endif %}
+										</p>
+										{% endif %}
+									</div>
+								</div>
+							</a>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="goto-link">
+					<a href="catalog/view/theme/kazmebel/catalog.html">
+						Перейти в каталог
+						<svg width="14" height="11">
+							<use xlink:href="catalog/view/theme/kazmebel/sprite/sprite.svg#blocks-arrow"></use>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</section>
+		{% endif %}
+
+
+
+
+
+
+
+
+		{{ footer }} 
+		<script type="text/javascript"><!--
+		$('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
+			$.ajax({
+				url: 'index.php?route=product/product/getRecurringDescription',
+				type: 'post',
+				data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+				dataType: 'json',
+				beforeSend: function() {
+					$('#recurring-description').html('');
+				},
+				success: function(json) {
+					$('.alert-dismissible, .text-danger').remove();
+
+					if (json['success']) {
+						$('#recurring-description').html(json['success']);
 					}
+				}
+			});
+		});
+		//--></script> 
+		<script type="text/javascript"><!--
+		$('#button-cart').on('click', function() {
+			$.ajax({
+				url: 'index.php?route=checkout/cart/add',
+				type: 'post',
+				data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+				dataType: 'json',
+				beforeSend: function() {
+					$('#button-cart').button('loading');
+				},
+				complete: function() {
+					$('#button-cart').button('reset');
+				},
+				success: function(json) {
+					$('.alert-dismissible, .text-danger').remove();
+					$('.form-group').removeClass('has-error');
+
+					if (json['error']) {
+						if (json['error']['option']) {
+							for (i in json['error']['option']) {
+								var element = $('#input-option' + i.replace('_', '-'));
+
+								if (element.parent().hasClass('input-group')) {
+									element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+								} else {
+									element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+								}
+							}
+						}
+
+						if (json['error']['recurring']) {
+							$('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+						}
 
 				// Highlight any found errors
 				$('.text-danger').parent().addClass('has-error');
@@ -550,105 +555,105 @@
 			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 		}
 	});
-	});
-	//--></script> 
-	<script type="text/javascript"><!--
-
-
-	$('button[id^=\'button-upload\']').on('click', function() {
-		var node = this;
-
-		$('#form-upload').remove();
-
-		$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
-
-		$('#form-upload input[name=\'file\']').trigger('click');
-
-		if (typeof timer != 'undefined') {
-			clearInterval(timer);
-		}
-
-		timer = setInterval(function() {
-			if ($('#form-upload input[name=\'file\']').val() != '') {
-				clearInterval(timer);
-
-				$.ajax({
-					url: 'index.php?route=tool/upload',
-					type: 'post',
-					dataType: 'json',
-					data: new FormData($('#form-upload')[0]),
-					cache: false,
-					contentType: false,
-					processData: false,
-					beforeSend: function() {
-						$(node).button('loading');
-					},
-					complete: function() {
-						$(node).button('reset');
-					},
-					success: function(json) {
-						$('.text-danger').remove();
-
-						if (json['error']) {
-							$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
-						}
-
-						if (json['success']) {
-							alert(json['success']);
-
-							$(node).parent().find('input').val(json['code']);
-						}
-					},
-					error: function(xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-			}
-		}, 500);
-	});
-	//--></script> 
-	<script type="text/javascript"><!--
-	$('#review').delegate('.pagination a', 'click', function(e) {
-		e.preventDefault();
-
-		$('#review').fadeOut('slow');
-
-		$('#review').load(this.href);
-
-		$('#review').fadeIn('slow');
-	});
-
-	$('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
-
-	$('#button-review').on('click', function() {
-		$.ajax({
-			url: 'index.php?route=product/product/write&product_id={{ product_id }}',
-			type: 'post',
-			dataType: 'json',
-			data: $("#form-review").serialize(),
-			beforeSend: function() {
-				$('#button-review').button('loading');
-			},
-			complete: function() {
-				$('#button-review').button('reset');
-			},
-			success: function(json) {
-				$('.alert-dismissible').remove();
-
-				if (json['error']) {
-					$('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
-				}
-
-				if (json['success']) {
-					$('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
-
-					$('input[name=\'name\']').val('');
-					$('textarea[name=\'text\']').val('');
-					$('input[name=\'rating\']:checked').prop('checked', false);
-				}
-			}
 		});
-	});
+		//--></script> 
+		<script type="text/javascript"><!--
+
+
+		$('button[id^=\'button-upload\']').on('click', function() {
+			var node = this;
+
+			$('#form-upload').remove();
+
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+			$('#form-upload input[name=\'file\']').trigger('click');
+
+			if (typeof timer != 'undefined') {
+				clearInterval(timer);
+			}
+
+			timer = setInterval(function() {
+				if ($('#form-upload input[name=\'file\']').val() != '') {
+					clearInterval(timer);
+
+					$.ajax({
+						url: 'index.php?route=tool/upload',
+						type: 'post',
+						dataType: 'json',
+						data: new FormData($('#form-upload')[0]),
+						cache: false,
+						contentType: false,
+						processData: false,
+						beforeSend: function() {
+							$(node).button('loading');
+						},
+						complete: function() {
+							$(node).button('reset');
+						},
+						success: function(json) {
+							$('.text-danger').remove();
+
+							if (json['error']) {
+								$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+							}
+
+							if (json['success']) {
+								alert(json['success']);
+
+								$(node).parent().find('input').val(json['code']);
+							}
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});
+				}
+			}, 500);
+		});
+		//--></script> 
+		<script type="text/javascript"><!--
+		$('#review').delegate('.pagination a', 'click', function(e) {
+			e.preventDefault();
+
+			$('#review').fadeOut('slow');
+
+			$('#review').load(this.href);
+
+			$('#review').fadeIn('slow');
+		});
+
+		$('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
+
+		$('#button-review').on('click', function() {
+			$.ajax({
+				url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+				type: 'post',
+				dataType: 'json',
+				data: $("#form-review").serialize(),
+				beforeSend: function() {
+					$('#button-review').button('loading');
+				},
+				complete: function() {
+					$('#button-review').button('reset');
+				},
+				success: function(json) {
+					$('.alert-dismissible').remove();
+
+					if (json['error']) {
+						$('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+					}
+
+					if (json['success']) {
+						$('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+						$('input[name=\'name\']').val('');
+						$('textarea[name=\'text\']').val('');
+						$('input[name=\'rating\']:checked').prop('checked', false);
+					}
+				}
+			});
+		});
 
 	// собираем все якоря; устанавливаем время анимации и количество кадров
 	const anchors = [].slice.call(document.querySelectorAll('a[href*="#"]')),
@@ -685,3 +690,70 @@
 });
 
 	//--></script>
+	<script>
+	$(document).ready(function(){
+		$(document).click( function(event){
+			if( $(event.target).closest(".location__list").length || $(event.target).closest(".js-location-btn").length ) {
+				return;
+			} else {
+				$(".js-location").removeClass('active');
+			}
+			if( $(event.target).closest(".lang__list").length ||  $(event.target).closest(".js-lang").length ) {
+				return;
+			} else {
+				$(".js-lang").removeClass('active');
+			}
+		});
+		$('.catalog-slider__fav').on('click',function(e){
+			e.preventDefault();
+			item = $(this).parent().parent();
+			if(item.hasClass('liked')){
+				item.removeClass('liked');
+			} else {
+				item.addClass('liked');
+			}			
+		});
+
+
+
+		var d;
+		var k=0;
+		/*текстуры*/
+
+		$('.materials-item').on('click', function(e) {
+
+			var srcMin = $(this).children("img").attr('src');
+			$('#texture-img').attr('src', srcMin);
+
+			$('.materials__items').children(".active").removeClass("active");
+			$(this).toggleClass("active");
+
+			var type = $(this).parent(".materials__items").parent(".materials__block").children(".materials__title").text();
+			$('#type-color').text(type);
+
+			var nameColor = $(this).children("figcaption").text();
+			$('#name-color').text(nameColor);
+
+			if(k==0) {$('.active-desc').toggleClass("hide"); k++;}
+
+			$(d).removeClass("see");
+
+
+			var idTexture =  $(this).attr('id');
+			var descReplace = '.desc-' + idTexture;
+
+			if (idTexture == 'texture') {
+				$('.active-desc').removeClass("hide"); k=0;
+			} 
+
+			$(descReplace).toggleClass("see");
+			d = descReplace;
+
+			return d;
+
+		});
+
+
+
+	});
+	</script>

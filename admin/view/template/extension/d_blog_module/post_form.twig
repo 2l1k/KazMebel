@@ -206,7 +206,10 @@
                                     {% set video_row = 0 %}
                                     {% for post_video in post_videos %}
                                     <tr id="video_row_{{video_row}}">
-                                        <td><input class="form-control" type="text" value="{{post_video.video}}" name="post_video[{{video_row}}][video]"></td>
+                                        <td>
+
+                                            <a href="" id="thumb-image{{ video_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ post_video.thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                                            <input type="hidden" name="post_video[{{ video_row }}][video]" value="{{ post_video.image }}" id="input-image{{ video_row }}" />
                                         <td>
 
                                             {% for language in languages %}
@@ -625,7 +628,7 @@ function AddVideo()
     var token = Math.random().toString(36).substr(2);
     var html = '';
     html += '<tr id="video_row_'+token+'">';
-    html += '<td><input class="form-control" type="text" name="post_video['+token+'][video]"></td>';
+    html += '<td><a href="" id="thumb-image' + token + '"data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="post_video[' + token + '][video]" value="" id="input-image' + token + '" /></td>';
     html +='<td>';
     {% for language in languages %}
             html += ' <div class="input-group"><span class="input-group-addon"><img src="{{language.flag}}" title="{{language.name}}" /></span><textarea class="form-control" name="post_video['+token+'][text][{{language.language_id}}]"></textarea></div>';

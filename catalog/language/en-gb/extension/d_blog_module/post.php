@@ -21,3 +21,6 @@ $_['text_login']			   = 'Please <a href="index.php?route=account/login">login</a
 $_['text_contact_admin']       = 'Please <a href="index.php?route=information/contact">contact</a> the site administrator to receive access to this content';
 $_['restrict_access_label_group']       = 'Access only for member of group %';
 $_['restrict_access_label_user']       = 'Access only for permited users';
+
+$_['text_prev']        = 'Предыдущий';
+$_['text_next']        = 'Следующий';

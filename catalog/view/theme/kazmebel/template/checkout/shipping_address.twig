@@ -42,13 +42,14 @@
 			{% endfor %}
 		</select>
 		<!-- <input type="text" name="city" value="" placeholder="{{ entry_city }}" id="input-shipping-city" /> -->
+		{% if cities %}
 		<select name="city">
 			<option value="">Город</option>
-			<option value="Нур-Султан">Нур-Султан (Астана)</option>
-			<option value="Тараз">Тараз</option>
-			<option value="Караганда">Караганда</option>
-			<option value="Усть-Каменогорск">Усть-Каменогорск</option>
+			{% for city in cities %}
+			<option value="{{ city.name }}">{{ city.name }}</option>
+			{% endfor %}
 		</select>
+		{% endif %}
 		<input type="text" name="address_1" value="" placeholder="{{ entry_address_1 }}" id="input-shipping-address-1" class="address">
 		<input type="text" name="postcode" value="{{ postcode }}" placeholder="{{ entry_postcode }}" id="input-shipping-postcode" >
 		<select name="zone_id" id="input-shipping-zone">

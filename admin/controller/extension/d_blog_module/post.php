@@ -748,6 +748,18 @@ class ControllerExtensionDBlogModulePost extends Controller
             $data['post_videos'] = array();
         }
 
+        for ($i=0; $i < count($data['post_videos']); $i++) { 
+            if (is_file(DIR_IMAGE . $data['post_videos'][$i]['video'])) {
+                $image = $data['post_videos'][$i]['video'];
+                $thumb = $data['post_videos'][$i]['video'];
+            } else {
+                $image = '';
+                $thumb = 'no_image.png';
+            }
+
+            $data['post_videos'][$i]['thumb'] = $this->model_tool_image->resize($thumb, 100, 100);
+        }
+
         if (isset($this->request->get['post_id'])) {
             $products = $this->model_extension_d_blog_module_post->getPostProducts($this->request->get['post_id']);
         } else {

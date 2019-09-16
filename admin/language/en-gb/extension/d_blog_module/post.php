@@ -19,8 +19,8 @@ $_['entry_product']				= 'Products';
 $_['entry_post']				= 'Posts';
 $_['entry_author']				= 'Author';
 
-$_['tab_youtube']             	= 'Youtube videos';
-$_['text_youtube_url']        	= 'Youtube Url';
+$_['tab_youtube']             	= 'Images';
+$_['text_youtube_url']        	= 'Image';
 $_['text_youtube_title']      	= 'Title';
 $_['text_youtube_width']      	= 'Width';
 $_['text_youtube_height']     	= 'Height';

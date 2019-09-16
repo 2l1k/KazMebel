@@ -10,7 +10,7 @@
                 </a>
             </li>
             {% for breadcrumb in breadcrumbs %}
-            {% if breadcrumb.text != '<i class="fa fa-home"></i>' %}
+            {% if breadcrumb.text != '<i class="fa fa-home"></i>' and breadcrumb.text != 'Our Blog' %}
             <li class="breadcrumbs__item"><a href="{{ breadcrumb.href }}" class="breadcrumbs__link">{{ breadcrumb.text }}</a></li>
             {% endif %}
             {% endfor %}

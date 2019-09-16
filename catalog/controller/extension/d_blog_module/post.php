@@ -244,7 +244,7 @@ class ControllerExtensionDBlogModulePost extends Controller
             $data['author_description'] = (isset($author['short_description'])) ? strip_tags(html_entity_decode($author['short_description'], ENT_QUOTES, 'UTF-8')) : '';
 
             $data['description'] = html_entity_decode($post_info['description'], ENT_QUOTES, 'UTF-8');
-            $data['date_published'] = iconv(mb_detect_encoding(strftime($this->setting['post']['date_format'][$this->config->get('config_language_id')], strtotime($post_info['date_published']))), "utf-8//IGNORE", strftime($this->setting['post']['date_format'][$this->config->get('config_language_id')], strtotime($post_info['date_published'])));
+            $data['date_published'] = date('d.m.Y', strtotime($post_info['date_published']));
 
             $data['date_modified'] = strftime($this->setting['post']['date_format'][$this->config->get('config_language_id')], strtotime($post_info['date_modified']));
             $data['date_published_link'] = $this->url->link('extension/d_blog_module/search', 'date_published=' . date("m", strtotime($post_info['date_published'])) . '-' . date("Y", strtotime($post_info['date_published'])), 'SSL');
@@ -308,7 +308,8 @@ class ControllerExtensionDBlogModulePost extends Controller
             foreach ($post_videos as $video) {
                 $data['post_videos'][] = array(
                     'text' => $video['text'],
-                    'code' => '<iframe frameborder="0" allowfullscreen src="' . str_replace("watch?v=", "embed/", $video['video']) . '" height="' . $video['height'] . '" width="100%" style="max-width:' . $video['width'] . 'px"></iframe>'
+                    'code' => '<iframe frameborder="0" allowfullscreen src="' . str_replace("watch?v=", "embed/", $video['video']) . '" height="' . $video['height'] . '" width="100%" style="max-width:' . $video['width'] . 'px"></iframe>',
+                    'image' =>  'image/' . $video['video']
                 );
             }
 
@@ -415,7 +416,6 @@ class ControllerExtensionDBlogModulePost extends Controller
                     'thumb'             => ($prev_post_info['image']) ? $this->model_tool_image->resize($prev_post_info['image'], $this->setting['post_thumb']['image_width'], $this->setting['post_thumb']['image_height']) : '',
                 );
             }
-
 
             //metas
             $this->document->setTitle($post_info['meta_title']);
@@ -601,7 +601,7 @@ class ControllerExtensionDBlogModulePost extends Controller
                 $data['review'] = $post['review'];
                 $data['image_title'] = (!empty($post['image_title'])) ? $post['image_title'] : $data['title'];
                 $data['image_alt'] = (!empty($post['image_alt'])) ? $post['image_title'] : $data['title'];
-                $data['date_published'] = iconv(mb_detect_encoding(strftime($this->setting['post_thumb']['date_format'][$this->config->get('config_language_id')], strtotime($post['date_published']))), "utf-8//IGNORE", strftime($this->setting['post_thumb']['date_format'][$this->config->get('config_language_id')], strtotime($post['date_published'])));
+                $data['date_published'] = date('d.m.Y', strtotime($post['date_published']));
 
                 $data['date_published_short'] = strftime($this->language->get('date_format_short'), strtotime($post['date_published']));
                 $data['date_published_day'] = strftime($this->setting['post_thumb']['date_format_day'], strtotime($post['date_published']));

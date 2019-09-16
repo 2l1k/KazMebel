@@ -17,13 +17,16 @@
 				{% endfor %}
 			</select>
 			<!-- <input type="text" name="city" value="" placeholder="{{ entry_city }}" id="input-payment-city" /> -->
+
+			{% if cities %}
 			<select name="city">
 				<option value="">Город</option>
-				<option value="Нур-Султан">Нур-Султан (Астана)</option>
-				<option value="Тараз">Тараз</option>
-				<option value="Караганда">Караганда</option>
-				<option value="Усть-Каменогорск">Усть-Каменогорск</option>
+				{% for city in cities %}
+				<option value="{{ city.name }}">{{ city.name }}</option>
+				{% endfor %}
 			</select>
+			{% endif %}
+
 			<input type="text" name="address_1" value="" placeholder="{{ entry_address_1 }}" id="input-payment-address-1" class="address">
 			<input type="text" name="postcode" value="{{ postcode }}" placeholder="{{ entry_postcode }}" id="input-payment-postcode" >
 			<select name="zone_id" id="input-payment-zone">
@@ -42,7 +45,7 @@
 
 
 
-						<script type="text/javascript"><!--
+<script type="text/javascript"><!--
 // Sort the custom fields
 $('#account .form-group[data-sort]').detach().each(function() {
 	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#account .form-group').length) {

@@ -37,6 +37,47 @@ class ControllerCheckoutShippingAddress extends Controller {
 
 		// Custom Fields
 		$data['custom_fields'] = array();
+
+		// GetIP
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$client_ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$client_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$client_ip = $_SERVER['REMOTE_ADDR'];
+		}
+
+		$ipwhois = file_get_contents('http://free.ipwhois.io/json/' . $client_ip . '?lang=ru');
+		$result = json_decode($ipwhois, true);
+		
+		// session_start();
+		if ($result['city'] && empty($this->session->data['city'])) {
+			$this->session->data['city'] = $result['city'];
+		}
+
+		if (isset($this->request->get['city'])) {
+			$this->session->data['city'] = $this->request->get['city'];
+		}
+
+		if ($this->session->data['city']) {
+			$data['current_city'] = $this->session->data['city'];
+		} else {
+			$data['current_city'] = 'Выберите город';
+		}
+
+		// Custom Fields
+		$data['cities'] = array();
+		
+		$this->load->model('account/custom_field');
+
+		$custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
+
+		foreach ($custom_fields as $custom_field) {
+			if ($custom_field['custom_field_id'] == '4') {
+				$data['cities'] = $custom_field["custom_field_value"];
+			}
+		}
+		// GetIP
 		
 		$this->load->model('account/custom_field');
 
